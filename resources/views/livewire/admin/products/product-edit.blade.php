@@ -9,8 +9,9 @@
                 </label>
             </div>
             <img class="aspect-[16/9] object-cover object-center w-full"
-                src="{{ $image ? $image->temporaryUrl() : asset('img/no-image.png') }}" alt="">
+                src="{{ $image ? $image->temporaryUrl() : Storage::url($productEdit['image_path'])}}" alt="">
         </figure>
+
 
         <x-validation-errors class="mb-4"></x-validation-errors>
 
@@ -20,7 +21,7 @@
                 <x-label class="mb-1">
                     Codigo
                 </x-label>
-                <x-input wire:model="product.sku" class="w-full"
+                <x-input wire:model="productEdit.sku" class="w-full"
                     placeholder="Por favor Ingrese el Codigo del Producto"></x-input>
             </div>
             <div class="mb-4">
@@ -28,14 +29,14 @@
                     Nombre
                 </x-label>
 
-                <x-input wire:model="product.name" class="w-full"
+                <x-input wire:model="productEdit.name" class="w-full"
                     plceholder="Por favor Ingrese el Nombre del Producto"></x-input>
             </div>
             <div class="mb-4">
                 <x-label>
                     Descripcion
                 </x-label>
-                <x-textarea wire:model="product.description" class="w-full"
+                <x-textarea wire:model="productEdit.description" class="w-full"
                     placeholder="Por favor Ingrese la Descripcion del Producto">
 
                 </x-textarea>
@@ -76,7 +77,7 @@
                 <x-label class="mb-1">
                     SubCategorias
                 </x-label>
-                <x-select class="w-full" wire:model.live="product.subcategory_id">
+                <x-select class="w-full" wire:model.live="productEdit.subcategory_id">
                     <option value="" disabled>
                         Seleccione una SubCategoria
                     </option>
@@ -92,15 +93,45 @@
                 <x-label class="mb-1">
                     Precio
                 </x-label>
-                <x-input type="number" step="0.01" wire:model="product.price" class="w-full" placeholder=" Por favor Ingrese el Precio del Producto">
+                <x-input type="number" step="0.01" wire:model="productEdit.price" class="w-full" placeholder=" Por favor Ingrese el Precio del Producto">
                 </x-input>
             </div>
 
             <div class="flex justify-end">
-                <x-button>
-                    Crear Producto
+                <x-danger-button onclick="confirmDelete()">
+                    Eliminar
+                </x-danger-button>
+                <x-button class="ml-2">
+                    Actualizar
                 </x-button>
             </div>
         </div>
     </form>
+
+    <form action="{{ route('admin.products.destroy', $product) }}" method="POST" id="delete-form">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    @push('js')
+        <script>
+            function confirmDelete() {
+                
+                Swal.fire({
+                    title: "¿Estas Seguro?",
+                    text: "No podrás revertir esto!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "¡Si, Borralo!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form').submit();
+                    }
+                });
+            }
+        </script>
+    @endpush
 </div>
