@@ -43,6 +43,22 @@ class NewOptionForm extends Form
         return $rules;
     }
 
+    public function validationAttributes()
+    {
+        $attributes = [
+            'name' => 'nombre',
+            'type'=> 'tipo',
+            'features' => 'valores',
+        ];
+
+        foreach ($this->features as $index => $feature) {
+            $attributes['features.' . $index . '.value'] = 'valor ' . ($index + 1);
+            $attributes['features.' . $index . '.description'] = 'descripcion ' . ($index + 1);
+        }
+
+        return $attributes;
+    }
+
     public function addFeature()
     {
         $this->features[] = [
