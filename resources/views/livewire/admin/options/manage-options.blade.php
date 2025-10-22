@@ -28,7 +28,6 @@
                         </div>
 
                         {{-- Valores  --}}
-
                         <div class="flex flex-wrap mb-4">
                             @foreach ($option->features as $feature)
                                 @switch($option->type)
